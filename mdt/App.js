@@ -1,35 +1,27 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View , Button} from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import LoginScreen from './src/Pages/Login';
 
+class GuyScreen extends React.Component {
+    static navigationOptions = {
+        title: 'Welcome'
+    };
+    render() {
+        return <Text>Hello, Navigation!</Text>;
+    }
+}
 
-const HomeScreen = () => (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Home Screen</Text>
-    </View>
-);
-
-const DetailsScreen = () => (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Details Screen</Text>
-    </View>
-);
-
-const RootNavigator = StackNavigator({
-    Home: {
-        screen: HomeScreen,
+const RootNavigator = StackNavigator(
+    {
+        Home: {screen: LoginScreen},
+        Guy: {screen: GuyScreen}
     },
-    Details: {
-        screen: DetailsScreen,
-    },
-});
+    {headerMode: 'screen'}
+);
 
 export default class App extends React.Component {
-  render() {
-    return (
-      <View>
-        <RootNavigator />
-      </View>
-    );
-  }
+    render() {
+        return <RootNavigator/>;
+    }
 }
