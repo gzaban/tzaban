@@ -34,8 +34,13 @@ class LoginScreen extends React.Component {
         );
     };
 
-    render() {
+    onSubmit = () => {
         const { navigate } = this.props.navigation;
+        navigate('Accounts');
+    };
+
+    render() {
+
         return <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps={'handled'}>
                     <Image
                         style={styles.stretch}
@@ -52,6 +57,7 @@ class LoginScreen extends React.Component {
                         component={this.renderField}
                     />
                     <Button
+                        onPress={this.onSubmit}
                         raised
                         rightIcon={{name: 'key', type: 'octicon'}}
                         title='LOGIN' />

@@ -1,23 +1,15 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { StyleSheet, Text, View , Button} from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import store from './src/redux/store';
-import LoginScreen from './src/Pages/Login';
 
-class GuyScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Welcome'
-    };
-    render() {
-        return <Text>Hello, Navigation!</Text>;
-    }
-}
+import LoginScreen from './src/Pages/Login';
+import AccountsScreen from './src/Pages/Accounts';
 
 const RootNavigator = StackNavigator(
     {
         Home: {screen: LoginScreen},
-        Guy: {screen: GuyScreen}
+        Accounts: {screen: AccountsScreen}
     },
     {headerMode: 'screen'}
 );
