@@ -1,8 +1,6 @@
+import {ACTION_TYPES} from '../Actions/AuthActions';
 
 
-const ACTION_TYPES = {
-    USER_LOGIN: 'USER_LOGIN'
-};
 
 const initialState = {};
 

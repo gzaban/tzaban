@@ -1,13 +1,12 @@
-'use strict';
+import axios from 'axios';
 import APIUtils from './APIUtils';
 import request from 'superagent';
-import Config from '../config';
-import ons from 'onsenui';
+import Config from './config';
 
 const AuthAPI = {
 	login(user) {
 		return new Promise((resolve, reject) => {
-			request.post(Config.apiUrl + 'oauth/token')
+            axios.post(Config.apiUrl + 'oauth/token')
 				.send(user)
 				.set({'Accept': 'application/json',
 					'Content-Type': 'application/x-www-form-urlencoded',
