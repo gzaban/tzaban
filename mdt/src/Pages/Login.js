@@ -61,8 +61,7 @@ class LoginScreen extends React.Component {
             client_id: this.state.client_id,
             client_secret: this.state.client_secret,
             username: values.username,
-            password: values.password,
-            ApiURL: this.state.ApiURL,
+            password: values.password
         };
 
         console.log(user);
