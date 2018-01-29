@@ -14,12 +14,9 @@ export const Logins = (user) => dispatch => {
     axios.defaults.headers.post['Cache-Control'] = 'no-cache';
     axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
-    return axios({
-        url: Config.apiUrl + 'oauth/token',
-        method: 'post',
-        data: user
-    }).then((response) => {
+    return axios.post(Config.apiUrl + 'oauth/token', user ).then((response) => {
         console.log(response);
+
         return dispatch({
             type: ACTION_TYPES.USER_LOGIN,
             payload: response.data
