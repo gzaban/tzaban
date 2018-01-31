@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Config from "../../utils/config";
+import {Alert} from 'react-native';
 
 export const ACTION_TYPES = {
     USER_LOGIN: 'USER_LOGIN',
@@ -31,11 +32,28 @@ export const getToken = (user) => dispatch => {
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);
+
+            Alert.alert(
+                'Login Failed',
+                error.response.data.toString(),
+                [
+                    {text: 'OK', onPress: () => console.log('OK Pressed')},
+                ],
+                { cancelable: true }
+            )
         } else if (error.request) {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
             // http.ClientRequest in node.js
             console.log(error.request);
+            Alert.alert(
+                'Login Failed',
+                error.request ? error.request.error_description.toString(),
+                [
+                    {text: 'OK', onPress: () => console.log('OK Pressed')},
+                ],
+                { cancelable: true }
+            )
         } else {
             // Something happened in setting up the request that triggered an Error
             console.log('Error', error.message);
