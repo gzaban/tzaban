@@ -1,11 +1,10 @@
 import React from "react";
 import {connect} from 'react-redux';
-import { ScrollView , View , StyleSheet, Image, TouchableOpacity} from 'react-native';
+import { ScrollView , View , StyleSheet, Image} from 'react-native';
 import {Field, reduxForm, Form} from 'redux-form';
 import { FormLabel, FormInput, Button, FormValidationMessage } from 'react-native-elements';
 import Config from '../utils/config';
-
-import {Logins} from '../redux/Actions/AuthActions'
+import {getToken} from '../redux/Actions/AuthActions';
 
 const styles = StyleSheet.create({
     page: {
@@ -64,11 +63,15 @@ class LoginScreen extends React.Component {
             password: values.password
         };
 
-        console.log(user);
+        //console.log(user);
 
-        this.props.logins(user);
+        this.props.getToken(user).then(() =>{
+            console.log('LOGINS OK');
 
-        // navigate('Accounts');
+            // navigate('Accounts');
+        });
+
+
     };
 
     render() {
@@ -107,16 +110,16 @@ const mapStateToProps = (state, props) => {
     return {
         initialValues: {
             username: 'guy@panpwr.com',
-            password: 'mylindab1'
+            password: 'Mylindab12'
         }
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        logins: (user) => {
+        getToken: (user) => {
             console.log('mapDispatchToProps');
-            return dispatch(Logins(user));
+            return dispatch(getToken(user));
         }
     };
 };

@@ -6,16 +6,19 @@ export const ACTION_TYPES = {
     USER_LOGIN_FAIL: 'USER_LOGIN_FAIL'
 };
 
-export const Logins = (user) => dispatch => {
-    console.log('Actions Logins', user);
+export const getToken = (user) => dispatch => {
+    // console.log('Actions Logins', user);
 
     axios.defaults.headers.common['Content-Type'] = 'application/json';
-    axios.defaults.headers.common['accept'] = 'application/json';
+    axios.defaults.headers.common['Accept'] = 'application/json';
     axios.defaults.headers.post['Cache-Control'] = 'no-cache';
     axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
-    return axios.post(Config.apiUrl + 'oauth/token', user ).then((response) => {
-        console.log(response);
+    const data = `grant_type=${user.grant_type}&client_id=${user.client_id}&client_secret=${user.client_secret}&username=${user.username}&password=${user.password}`;
+
+
+    return axios.post(Config.apiUrl + 'oauth/token', data ).then((response) => {
+        console.log('Logins', response.data);
 
         return dispatch({
             type: ACTION_TYPES.USER_LOGIN,
