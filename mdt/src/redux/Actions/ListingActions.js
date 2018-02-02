@@ -2,28 +2,19 @@ import axios from 'axios';
 import Config from "../../utils/config";
 import {Alert} from 'react-native';
 
-export const ACTION_TYPES = {
-    USER_LOGIN: 'USER_LOGIN',
-    USER_LOGIN_FAIL: 'USER_LOGIN_FAIL'
+export const LISTING_ACTION_TYPES = {
+    GET_ACCOUNTS_LISTING_SUCCEED: 'GET_ACCOUNTS_LISTING_SUCCEED',
+    GET_ACCOUNTS_LISTING_FAIL: 'GET_ACCOUNTS_LISTING_FAIL'
 };
 
-export const getToken = (user) => dispatch => {
-    // console.log('Actions Logins', user);
+export const getAccountsListing = (longitude, latitude ,page) => dispatch => {
 
-    axios.defaults.headers.common['Content-Type'] = 'application/json';
-    axios.defaults.headers.common['Accept'] = 'application/json';
-    axios.defaults.headers.post['Cache-Control'] = 'no-cache';
-    axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-
-    const data = `grant_type=${user.grant_type}&client_id=${user.client_id}&client_secret=${user.client_secret}&username=${user.username}&password=${user.password}`;
-
-
-    return axios.post(Config.apiUrl + 'oauth/token', data ).then((response) => {
-        // console.log('Logins', response.data);
+    return axios.get(Config.apiUrl + `deploy/listing/paging/accounts?latitude=${latitude}&longitude=${longitude}&page=${page}` ).then((response) => {
+       //  console.log('GET_ACCOUNTS_LISTING:', response.data.mainData);
 
         return dispatch({
-            type: ACTION_TYPES.USER_LOGIN,
-            payload: response.data
+            type: LISTING_ACTION_TYPES.GET_ACCOUNTS_LISTING_SUCCEED,
+            payload: response.data.mainData
         });
     }).catch(error => {
         if (error.response) {
@@ -59,7 +50,44 @@ export const getToken = (user) => dispatch => {
             console.log('Error', error.message);
         }
         console.log(error.config);
-        dispatch({type: ACTION_TYPES.USER_LOGIN_FAIL});
+        dispatch({type: LISTING_ACTION_TYPES.GET_ACCOUNTS_LISTING_FAIL});
     });
 };
 
+
+
+
+/*
+export function accounts() {
+    dispatcher.dispatch({
+        type: "ACCOUNTS"
+    });
+}
+
+export function sites(accountId) {
+    dispatcher.dispatch({
+        type: "SITES",
+        accountId: accountId
+    });
+}
+
+export function siteTopology(siteId) {
+    dispatcher.dispatch({
+        type: "SITE_TOPOLOGY",
+        siteId: siteId
+    });
+}
+
+export function bridges(siteId) {
+    dispatcher.dispatch({
+        type: "BRIDGES",
+        siteId: siteId
+    });
+}
+
+export function devices(panelId) {
+    dispatcher.dispatch({
+        type: "DEVICES",
+        panelId: panelId
+    });
+}*/

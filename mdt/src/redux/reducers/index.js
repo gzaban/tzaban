@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
-import UserReducer from './UserReducer';
+import userReducer from './UserReducer';
+import listingReducer from './ListingReducer';
 
 // Combine Reducers
 const reducers = combineReducers({
-    userState: UserReducer,
+    userState: userReducer,
+    listingState: listingReducer,
     form: formReducer,
 });
 

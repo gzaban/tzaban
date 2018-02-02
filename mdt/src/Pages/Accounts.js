@@ -1,6 +1,9 @@
 import React from "react";
-import { ScrollView , View , StyleSheet, ListView} from 'react-native';
-import { List, ListItem, Avatar, SearchBar } from 'react-native-elements'
+import { ScrollView , View , StyleSheet, ActivityIndicator} from 'react-native';
+import { List, ListItem, Button, SearchBar } from 'react-native-elements'
+import {connect} from "react-redux";
+import {getAccountsListing} from "../redux/Actions/ListingActions";
+
 
 const styles = StyleSheet.create({
     page: {
@@ -14,29 +17,34 @@ const styles = StyleSheet.create({
 
 class AccountsScreen extends React.Component {
     static navigationOptions = {
-        title: 'Accounts'
+        title: 'Accounts',
+        headerRight: <Button onPress={() => console.log(this)}>1</Button>
     };
 
-    constructor (props){
+    constructor(props){
         super(props);
         this.state = {
-            dataSource: [
-                {
-                    name: 'Amy Farha',
-                    subtitle: 'Vice President'
-                },
-                {
-                    name: 'Chris Jackson',
-                    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-                    subtitle: 'Vice Chairman'
-                }
-                ]
+            loading: true,
         }
-
     }
+
+    componentDidMount() {
+        this.loadAccountsListing();
+    }
+
+    loadAccountsListing = () =>{
+        this.setState({loading: true});
+        this.props.getAccountsListing(0,0,1).then(() => {
+            this.setState({loading: false})
+        })
+    };
 
     render() {
         const { navigate } = this.props.navigation;
+        const {accountsList} = this.props;
+
+        console.log('ACCOUNTS_LIST', accountsList);
+
         return <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps={'handled'}>
             <SearchBar
                 containerStyle={styles.search}
@@ -45,24 +53,41 @@ class AccountsScreen extends React.Component {
                 onClearText={() =>{}}
                 icon={{ type: 'font-awesome', name: 'search' }}
                 placeholder='Type Here...' />
-            <List>
-                {
-                    this.state.dataSource.map((rowData, sectionID) => (
-                        <ListItem
-                            avatar={<Avatar
-                                rounded
-                                source={rowData.avatar_url && {uri: rowData.avatar_url}}
-                                title={rowData.name[0]}
-                            />}
-                            key={sectionID}
-                            title={rowData.name}
-                            subtitle={rowData.subtitle}
-                        />
-                    ))
-                }
-            </List>
+
+            {this.state.loading ?
+                <ActivityIndicator size="large" color="#0000ff" />
+                :
+                <List>
+                    {
+                        accountsList.map((rowData, sectionID) => (
+                            <ListItem
+                                key={sectionID}
+                                title={rowData.name}
+                                subtitle={rowData.varName}
+                            />
+                        ))
+                    }
+                </List>
+            }
+
+
         </ScrollView>;
     }
 }
 
-export default AccountsScreen
+const mapStateToProps = (state) => {
+    return {
+        accountsList: state.listingState.accountsList,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getAccountsListing: (longitude, latitude ,page) => {
+            return dispatch(getAccountsListing(longitude, latitude ,page));
+        }
+    };
+};
+
+AccountsScreen = connect(mapStateToProps, mapDispatchToProps)(AccountsScreen);
+export default AccountsScreen;

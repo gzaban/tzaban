@@ -5,6 +5,7 @@ import {Field, reduxForm, Form} from 'redux-form';
 import { FormLabel, FormInput, Button, FormValidationMessage } from 'react-native-elements';
 import Config from '../utils/config';
 import {getToken} from '../redux/Actions/AuthActions';
+import axios from "axios/index";
 
 const styles = StyleSheet.create({
     page: {
@@ -66,16 +67,18 @@ class LoginScreen extends React.Component {
         //console.log(user);
 
         this.props.getToken(user).then(() =>{
-            console.log('LOGINS OK');
+            // console.log('LOGIN OK');
 
-            // navigate('Accounts');
+            axios.defaults.headers.common['Content-Type'] = 'application/json';
+            axios.defaults.headers.common['Accept'] = 'application/json';
+            axios.defaults.headers.post['Cache-Control'] = 'no-cache';
+            axios.defaults.headers.common['Authorization'] = this.props.userInfo.token_type + ' '  +  this.props.userInfo.access_token;
+
+            navigate('Accounts');
         });
-
-
     };
 
     render() {
-        console.log(this.props);
         return <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps={'handled'}>
                     <Image
                         style={styles.stretch}
@@ -106,8 +109,9 @@ LoginScreen =  reduxForm({
     enableReinitialize: true,
 })(LoginScreen);
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state) => {
     return {
+        userInfo: state.userState,
         initialValues: {
             username: 'guy@panpwr.com',
             password: 'Mylindab12'
