@@ -7,12 +7,20 @@ import Config from '../utils/config';
 import {getToken} from '../redux/Actions/AuthActions';
 import axios from "axios/index";
 
+import { DangerZone } from 'expo';
+let { Lottie } = DangerZone;
+
+import DATA from '../../assets/data';
+
 const styles = StyleSheet.create({
     page: {
         paddingVertical: 20,
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
+    },
+    form: {
+        padding:30,
     },
     stretch: {
         resizeMode: 'contain',
@@ -38,9 +46,22 @@ class LoginScreen extends React.Component {
             client_secret: Config.client_secret,
             username: '',
             password: '',
-            loading: true
+            loading: true,
+            animation: null
         };
     }
+
+    componentDidMount() {
+        this._playAnimation();
+    }
+
+    _playAnimation = () => {
+
+            this.animation.reset();
+            this.animation.play();
+
+    };
+
 
     renderField = ({ input, meta, ...inputProps }) =>{
         return (
@@ -80,27 +101,40 @@ class LoginScreen extends React.Component {
 
     render() {
         return <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps={'handled'}>
-                    <Image
-                        style={styles.stretch}
-                        source={require('../../assets/logo.png')}
-                    />
-
-                    <Field
-                        label='Email'
-                        name="username"
-                        component={this.renderField}
-                    />
-                    <Field
-                        label='Password'
-                        name="password"
-                        component={this.renderField}
-                    />
-                    <Button
-                        onPress={this.props.handleSubmit(this.onSubmit)}
-                        raised
-                        rightIcon={{name: 'key', type: 'octicon'}}
-                        title='LOGIN' />
-                </ScrollView>;
+            <Lottie
+                ref={animation => {
+                    this.animation = animation;
+                }}
+                loop = {false}
+                style={{
+                    alignItems: 'center',
+                    width: 600,
+                    height: 200,
+                    backgroundColor: 'transparent',
+                    transform: [
+                        { scale: 0.7 }
+                    ]
+                }}
+                source={require('../../assets/data')}
+            />
+            <View style={styles.form}>
+                <Field
+                    label='Email'
+                    name="username"
+                    component={this.renderField}
+                />
+                <Field
+                    label='Password'
+                    name="password"
+                    component={this.renderField}
+                />
+                <Button
+                    onPress={this.props.handleSubmit(this.onSubmit)}
+                    raised
+                    rightIcon={{name: 'key', type: 'octicon'}}
+                    title='LOGIN' />
+            </View>
+        </ScrollView>;
     }
 }
 
